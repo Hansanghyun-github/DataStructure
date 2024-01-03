@@ -2,8 +2,6 @@
 
 boolean	add(E e)
 
-void	add(int index, E element)
-
 void	clear()
 
 boolean	contains(Object o)
@@ -13,8 +11,6 @@ E	get(int index)
 int	indexOf(Object o)
 
 boolean	isEmpty()
-
-int	lastIndexOf(Object o)
 
 E	remove(int index)
 

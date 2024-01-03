@@ -7,9 +7,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public class CustomLinkedList<E>
-        extends LinkedList<E>
-        implements List<E>{
+public class CustomLinkedList<E> implements CustomList<E>{
     // TODO index의 위치를 중심을 기준으로 first/last 시작 위치 세팅 -> 최적화
     // TODO OutOfBound 체크 메서드 생성 & 리팩토링
     private int modCount = 0;
@@ -17,7 +15,6 @@ public class CustomLinkedList<E>
 
     private Node<E> first;
     private Node<E> last;
-
 
     @Override
     public int size() {
@@ -51,22 +48,6 @@ public class CustomLinkedList<E>
     }
 
     @Override
-    public <T> T[] toArray(T[] a) { // 이게 무슨 역할을 하는거지
-        if (a.length < size)
-            a = (T[])java.lang.reflect.Array.newInstance(
-                    a.getClass().getComponentType(), size);
-        int i = 0;
-        Object[] result = a;
-        for (Node<E> x = first; x != null; x = x.next)
-            result[i++] = x.item;
-
-        if (a.length > size)
-            a[size] = null;
-
-        return a;
-    }
-
-    @Override
     public boolean add(E e) {
         linkLast(e);
         return true;
@@ -80,7 +61,7 @@ public class CustomLinkedList<E>
         if(l == null)
             first = newNode;
         else
-            l.next = null; // 멤버 변수를 가리키는 것이라서 가능
+            l.next = newNode; // 멤버 변수를 가리키는 것이라서 가능
 
         size++;
         modCount++;
@@ -131,31 +112,6 @@ public class CustomLinkedList<E>
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return super.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return super.addAll(c);
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return super.addAll(index, c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return super.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return super.retainAll(c);
-    }
-
-    @Override
     public E get(int index) {
         return node(index).item;
     }
@@ -168,24 +124,6 @@ public class CustomLinkedList<E>
         target.item = element;
 
         return oldVal;
-    }
-
-    @Override
-    public void add(int index, E element) {
-        Node<E> node = node(index);
-
-        if(node == last){
-            Node<E> newNode = new Node<>(node, element, null);
-            last = newNode;
-            last.prev = node;
-            node.next = newNode;
-        }
-
-        Node<E> next = node.next;
-        Node<E> newNode = new Node<>(node, element, next);
-
-        node.next = newNode;
-        next.prev = newNode;
     }
 
     // target is not null
@@ -227,38 +165,6 @@ public class CustomLinkedList<E>
         return -1;
     }
 
-    @Override
-    public int lastIndexOf(Object o) {
-        int index = 0;
-        for(Node<E> x = last; x != null; x = x.prev){
-            if(o.equals(x.item))
-                return index;
-            index++;
-        }
-        return -1;
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-        return listIterator();
-    }
-
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
-        return super.subList(fromIndex, toIndex);
-    }
-
-    // index is not out of bound
-    @Override
-    public ListIterator<E> listIterator() {
-        return listIterator(0);
-    }
-
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return super.listIterator(index);
-    }
-
     private String outOfBoundsMsg(int index) {
         return "Index: "+index+", Size: "+size;
     }
@@ -269,14 +175,13 @@ public class CustomLinkedList<E>
 
     private Node<E> node(int index) {
         Node<E> x = first;
-        while(x != null) {
-            if(index == 0)
-                return x;
+        for(int i = 0;i < index;i++) {
+            if(x == null)
+                throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
             x = x.next;
-            index--;
         }
 
-        throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        return x;
     }
 
     private static class Node<E> {
