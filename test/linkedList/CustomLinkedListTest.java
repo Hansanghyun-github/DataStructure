@@ -36,27 +36,20 @@ class CustomLinkedListTest {
     @Test
     @DisplayName("first가 null일 때 add")
     void addWhenFirstIsNull() throws Exception {
-        customList.add(10);
-        novelList.add(10);
+        add(1);
     }
 
     @Test
     @DisplayName("add 두번")
     void addTwice() throws Exception {
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
+        add(2);
     }
 
     @Test
     @DisplayName("clear")
     void clear() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
+        add(2);
 
         // when
         customList.clear();
@@ -69,8 +62,7 @@ class CustomLinkedListTest {
     @DisplayName("remove first")
     void removeFirst() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
+        add(1);
 
         // when
         customList.remove(Integer.valueOf(1));
@@ -83,10 +75,7 @@ class CustomLinkedListTest {
     @DisplayName("remove")
     void remove() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
+        add(2);
 
         // when
         customList.remove(Integer.valueOf(1));
@@ -99,10 +88,7 @@ class CustomLinkedListTest {
     @DisplayName("remove last")
     void removeLast() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
+        add(2);
 
         // when
         customList.remove(Integer.valueOf(2));
@@ -115,14 +101,7 @@ class CustomLinkedListTest {
     @DisplayName("remove specific index")
     void removeSpecificIndex() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
-        customList.add(3);
-        novelList.add(3);
-        customList.add(4);
-        novelList.add(4);
+        add(4);
 
         // when
         customList.remove(2);
@@ -135,12 +114,7 @@ class CustomLinkedListTest {
     @DisplayName("set")
     void set() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
-        customList.add(3);
-        novelList.add(3);
+        add(3);
 
         // when
         customList.set(1, 10);
@@ -153,12 +127,7 @@ class CustomLinkedListTest {
     @DisplayName("indexOf")
     void indexOf() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
-        customList.add(3);
-        novelList.add(3);
+        add(3);
 
         // when
         assertThat(customList.indexOf(1)).isEqualTo(novelList.indexOf(1));
@@ -172,17 +141,19 @@ class CustomLinkedListTest {
     @DisplayName("contains")
     void contains() throws Exception {
         // given
-        customList.add(1);
-        novelList.add(1);
-        customList.add(2);
-        novelList.add(2);
-        customList.add(3);
-        novelList.add(3);
+        add(3);
         
         // when
         assertThat(customList.contains(2)).isEqualTo(novelList.contains(2));
         assertThat(customList.contains(4)).isEqualTo(novelList.contains(4));
         
         // then
+    }
+
+    void add(int index){
+        for(int i=0;i<index;i++){
+            customList.add(i);
+            novelList.add(i);
+        }
     }
 }
