@@ -3,7 +3,7 @@ package tree;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BST {
+public class BstWithParent {
     Node root;
 
     public Node getRoot() {
@@ -12,7 +12,8 @@ public class BST {
 
     public void add(int data) {
         if(root == null){
-            root = new Node(null, data, null);
+            root = new Node(null, data, null, null);
+            root.parent = root;
             return;
         }
 
@@ -22,13 +23,15 @@ public class BST {
     private void add(int data, Node node){
         if(node.data > data){
             if(node.left == null){
-                node.left = new Node(null, data, null);
+                node.left = new Node(null, data, null, node);
+                node.left.parent = node;
             }
             else add(data, node.left);
         }
         else {
             if(node.right == null){
-                node.right = new Node(null, data, null);
+                node.right = new Node(null, data, null, node);
+                node.right.parent = node;
             }
             else add(data, node.right);
         }
@@ -62,56 +65,57 @@ public class BST {
         // root is null
         if(root == null) return false;
 
-        return findRemoveTargetNode(data, root, root);
+        return findRemoveTargetNode(data, root);
     }
 
-    private boolean findRemoveTargetNode(int data, Node node, Node parent) {
+    private boolean findRemoveTargetNode(int data, Node node) {
         if(node.data == data) {
-            deleteNode(node, parent);
+            deleteNode(node);
             return true;
         }
 
         // next
         if(node.data > data){
             if(node.left == null) return false;
-            else return findRemoveTargetNode(data, node.left, node);
+            else return findRemoveTargetNode(data, node.left);
         }
         else{
             if(node.right == null) return false;
-            else return findRemoveTargetNode(data, node.right, node);
+            else return findRemoveTargetNode(data, node.right);
         }
     }
 
-    private void deleteNode(Node target, Node parent) {
+    private void deleteNode(Node target) {
         if(target.left == null & target.right == null){
             if(target == root) {
                 root = null;
                 return;
             }
 
+            Node parent = target.parent;
             if(parent.data > target.data)
                 parent.left = null;
             else parent.right = null;
         }
         else if(target.left != null & target.right == null){
-            if(target == root){
-                root = target.left;
-            }
-            else if(parent.data > target.data){
+            Node parent = target.parent;
+            if(parent.data > target.data){
+                target.left.parent = parent;
                 parent.left = target.left;
             }
             else{
+                target.left.parent = parent;
                 parent.right = target.left;
             }
         }
         else if(target.left == null & target.right != null){
-            if(target == root){
-                root = target.right;
-            }
-            else if(parent.data > target.data){
+            Node parent = target.parent;
+            if(parent.data > target.data){
+                target.right.parent = parent;
                 parent.left = target.right;
             }
             else{
+                target.right.parent = parent;
                 parent.right = target.right;
             }
         }
@@ -121,15 +125,14 @@ public class BST {
         }
     }
 
-    /**
-     * find successor and unlink child node
-     * */
     private Node getSuccessorAndUnlink(Node target) {
         Node curParent = target;
         Node current = target.right;
 
         if(current.left == null){
             curParent.right = current.right;
+            if(curParent.right != null)
+                current.right.parent = curParent;
             current.right = null;
             return current;
         }
@@ -140,6 +143,8 @@ public class BST {
         }
 
         curParent.left = current.right;
+        if(current.right != null)
+            curParent.left.parent = curParent;
 
         current.right = null;
         return current;
@@ -196,10 +201,13 @@ public class BST {
         public Node left;
         public Node right;
 
-        public Node(Node left, int data, Node right) {
+        Node parent;
+
+        public Node(Node left, int data, Node right, Node parent) {
             this.data = data;
             this.left = left;
             this.right = right;
+            this.parent = parent;
         }
 
         public int countChild() {
@@ -210,4 +218,3 @@ public class BST {
         }
     }
 }
-
