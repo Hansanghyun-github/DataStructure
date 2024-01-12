@@ -122,7 +122,7 @@ public class CustomHashTable<K, V> {
         count = 0;
     }
 
-    private class Entry<K, V> {
+    private class Entry<K, V> { // TODO 이 제네릭을 빼보자
         final int hash; // hashcode 구하는 시간 단축시키기 위해 저장
         final K key;
         V value;
