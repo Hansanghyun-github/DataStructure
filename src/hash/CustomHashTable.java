@@ -29,7 +29,7 @@ public class CustomHashTable<K, V> {
         return count == 0;
     }
 
-    public boolean containsKey(K key) { // TODO Object ?
+    public boolean containsKey(K key) {
         if(key == null)
             throw new NullPointerException();
 
