@@ -98,6 +98,11 @@ public class BstWithParent {
             else parent.right = null;
         }
         else if(target.left != null & target.right == null){
+            if(target == root){
+                root = target.left;
+                target.left.parent = root;
+                return;
+            }
             Node parent = target.parent;
             if(parent.data > target.data){
                 target.left.parent = parent;
@@ -109,6 +114,11 @@ public class BstWithParent {
             }
         }
         else if(target.left == null & target.right != null){
+            if(target == root){
+                root = target.right;
+                target.right.parent = root;
+                return;
+            }
             Node parent = target.parent;
             if(parent.data > target.data){
                 target.right.parent = parent;
