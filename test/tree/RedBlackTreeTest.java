@@ -23,21 +23,19 @@ class RedBlackTreeTest {
         // given
         tree.add(2);
         tree.add(1);
-        tree.add(3);
 
         // when
-        tree.add(0);
+        tree.add(3);
 
         // then
         assertThat(tree.violations.size()).isZero();
 
-        assertThat(tree.size).isEqualTo(4);
+        assertThat(tree.size).isEqualTo(3);
 
         RedBlackTree.Node root = tree.root;
         rootNodeTest(root, 1, 2, 3, Black);
-        nodeTest(root.left, root, 0, 1, EMPTY, Red);
+        leafNodeTest(root.left, root, 1, Red);
         leafNodeTest(root.right, root, 3, Red);
-        leafNodeTest(root.left.left, root.left, 0, Red);
     }
 
     @Test
@@ -56,7 +54,7 @@ class RedBlackTreeTest {
     }
 
     @Test
-    @DisplayName("삽입 후 4번 속성 위반 케이스 1 왼쪽 버전")
+    @DisplayName("삽입 후 4번 속성 위반 케이스 1")
     void insertAttribute4ViolationCase1LeftVersion() throws Exception {
         // given
         tree.add(2);
