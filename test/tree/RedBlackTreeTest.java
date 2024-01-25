@@ -130,11 +130,13 @@ class RedBlackTreeTest {
         tree.add(3);
 
         // when
-        boolean b = tree.remove(1);
+        boolean b = tree.remove(3);
 
         // then
         assertThat(b).isTrue();
         assertThat(tree.violations.size()).isZero();
+
+        assertThat(tree.size).isEqualTo(2);
 
         RedBlackTree.Node root = tree.root;
 
@@ -189,7 +191,7 @@ class RedBlackTreeTest {
 
         RedBlackTree.Node root = tree.root;
 
-        rootNodeTest(root, 5, 10, 15, Black);
+        rootNodeTest(root, 7, 10, 15, Black);
         nodeTest(root.left, root, 5, 7, 9, Red);
         leafNodeTest(root.left.left, root.left, 5, Black);
         leafNodeTest(root.left.right, root.left, 9, Black);
@@ -222,10 +224,10 @@ class RedBlackTreeTest {
 
         RedBlackTree.Node root = tree.root;
 
-        rootNodeTest(root, 5, 10, 15, Black);
-        nodeTest(root.left, root, 5, 6, 7, Black);
-        leafNodeTest(root.left.left, root.left, 5, Red);
-        leafNodeTest(root.left.right, root.left, 9, Red);
+        rootNodeTest(root, 6, 10, 15, Black);
+        nodeTest(root.left, root, 5, 6, 7, Red);
+        leafNodeTest(root.left.left, root.left, 5, Black);
+        leafNodeTest(root.left.right, root.left, 7, Black);
         nodeTest(root.right, root, 12, 15, 17, Black);
         leafNodeTest(root.right.left, root.right, 12, Red);
         leafNodeTest(root.right.right, root.right, 17, Red);
@@ -254,6 +256,8 @@ class RedBlackTreeTest {
         // then
         assertThat(tree.violations.contains(DOUBLY_BLACK4)).isTrue();
     }
+
+    // TODO doubly black right case
 
     private void rootNodeTest(RedBlackTree.Node target,
                               int leftData,

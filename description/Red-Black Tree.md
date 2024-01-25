@@ -300,6 +300,15 @@ doubly black에서 extra black을 없애는 방법은 총 4가지로 분류된�
 > doubly black을 기준으로  
 > 위 case들 중 하나로 해결
 
+```
+        c              any
+       / \            /   \
+      a   e         red   black
+     / \           /   \
+    b   d         db   black
+```  
+(db의 형제노드의 정보를 다시 체크해야 함)
+
 ---
 
 ## Red-Black 트리 삭제 시나리오
