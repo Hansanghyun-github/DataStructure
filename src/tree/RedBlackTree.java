@@ -248,7 +248,7 @@ public class RedBlackTree {
             violations.add(Violation.DOUBLY_BLACK4);
             swapColor(parent, silblingNode);
             rotateLeft(parent);
-            checkRemoveViolation(Color.Black, replacedNode, replacedNode.parent, isLeft);
+            checkRemoveViolation(Color.Black, replacedNode, parent, isLeft);
         }
         else if(!isLeft && parent.left.color == Color.Black &&
                 parent.left.left != null &&
@@ -288,7 +288,7 @@ public class RedBlackTree {
             violations.add(Violation.DOUBLY_BLACK4);
             swapColor(parent, silblingNode);
             rotateRight(parent);
-            checkRemoveViolation(Color.Black, replacedNode, replacedNode.parent, isLeft);
+            checkRemoveViolation(Color.Black, replacedNode, parent, isLeft);
         }
         else throw new IllegalStateException("Invalid remove case");
     }
