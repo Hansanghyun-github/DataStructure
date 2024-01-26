@@ -234,27 +234,62 @@ class RedBlackTreeTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("Doubly Black 케이스 3")
     void doublyBlackCase3() throws Exception {
         // given
+        tree.add(10);
+        tree.add(5);
+        tree.add(15);
+        tree.add(2);
+        tree.add(7);
+        tree.add(12);
+        tree.add(17);
+        tree.add(11);
+        tree.remove(11);
 
         // when
+        tree.remove(12);
 
         // then
+        assertThat(tree.violations.size()).isOne();
         assertThat(tree.violations.contains(DOUBLY_BLACK3)).isTrue();
+
+        RedBlackTree.Node root = tree.root;
+        rootNodeTest(root, 5, 10, 15, Black);
+        nodeTest(root.left, root, 2, 5, 7, Black);
+        leafNodeTest(root.left.left, root.left, 2, Red);
+        leafNodeTest(root.left.right, root.left, 7, Red);
+
+        nodeTest(root.right, root, EMPTY, 15, 17, Black);
+        leafNodeTest(root.right.right, root.right, 17, Red);
     }
 
     @Test
-    @Disabled
     @DisplayName("Doubly Black 케이스 4")
     void doublyBlackCase4() throws Exception {
         // given
+        tree.add(10);
+        tree.add(5);
+        tree.add(15);
+        tree.add(12);
+        tree.add(17);
+        tree.add(19);
 
         // when
+        tree.remove(5);
 
         // then
+        assertThat(tree.violations.size()).isEqualTo(2);
+        assertThat(tree.violations.contains(DOUBLY_BLACK3)).isTrue();
         assertThat(tree.violations.contains(DOUBLY_BLACK4)).isTrue();
+
+        RedBlackTree.Node root = tree.root;
+        rootNodeTest(root, 10, 15, 17, Black);
+        nodeTest(root.left, root, EMPTY, 10, 12, Black);
+        leafNodeTest(root.left.right, root.left, 12, Red);
+
+        nodeTest(root.right, root, EMPTY, 17, 19, Black);
+        leafNodeTest(root.right.right, root.right, 19, Red);
     }
 
     // TODO doubly black right case
