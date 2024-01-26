@@ -280,8 +280,8 @@ class RedBlackTreeTest {
 
         // then
         assertThat(tree.violations.size()).isEqualTo(2);
-        assertThat(tree.violations.contains(DOUBLY_BLACK3)).isTrue();
         assertThat(tree.violations.contains(DOUBLY_BLACK4)).isTrue();
+        assertThat(tree.violations.contains(DOUBLY_BLACK3)).isTrue();
 
         RedBlackTree.Node root = tree.root;
         rootNodeTest(root, 10, 15, 17, Black);

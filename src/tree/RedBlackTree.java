@@ -207,20 +207,14 @@ public class RedBlackTree {
             return;
         }
 
-        Node silblingNode = isLeft? parent.right: parent.left;
-
-        // TODO Refactoring ctrl+alt+m, silblingNode change
-        if(isLeft && parent.right.color == Color.Black &&
-                parent.right.right != null &&
-                parent.right.right.color == Color.Red){ // doubly black 1
+        Node silblingNode = isLeft? parent.right : parent.left;
+        if(isDoublyBlackLeftCase1(isLeft, silblingNode)){ // doubly black 1
             violations.add(Violation.DOUBLY_BLACK1);
             swapColor(parent, silblingNode);
             silblingNode.right.color = Color.Black;
             rotateLeft(parent);
         }
-        else if(isLeft && parent.right.color == Color.Black &&
-                parent.right.left != null &&
-                parent.right.left.color == Color.Red){ // doubly black 2
+        else if(isDoublyBlackLeftCase2(isLeft, silblingNode)){ // doubly black 2
             violations.add(Violation.DOUBLY_BLACK2);
             swapColor(silblingNode, silblingNode.left);
             silblingNode = rotateRight(silblingNode);
@@ -230,9 +224,7 @@ public class RedBlackTree {
             silblingNode.right.color = Color.Black;
             rotateLeft(parent);
         }
-        else if(isLeft && parent.right.color == Color.Black &&
-                (parent.right.left == null ||
-                        parent.right.left.color == Color.Black)){ // doubly black 3
+        else if(isDoublyBlackLeftCase3(isLeft, silblingNode)){ // doubly black 3
             violations.add(Violation.DOUBLY_BLACK3);
             silblingNode.color = Color.Red;
 
@@ -244,23 +236,19 @@ public class RedBlackTree {
                 checkRemoveViolation(Color.Black, parent, parent.parent,
                         parent.parent.data > parent.data);
         }
-        else if(isLeft && parent.right.color == Color.Red){ // doubly black 4
+        else if(isDoublyBlackLeftCase4(isLeft, silblingNode)){ // doubly black 4
             violations.add(Violation.DOUBLY_BLACK4);
             swapColor(parent, silblingNode);
             rotateLeft(parent);
             checkRemoveViolation(Color.Black, replacedNode, parent, isLeft);
         }
-        else if(!isLeft && parent.left.color == Color.Black &&
-                parent.left.left != null &&
-                parent.left.left.color == Color.Red){ // doubly black 1 (right)
+        else if(isDoublyBlackRightCase1(isLeft, silblingNode)){ // doubly black 1 (right)
             violations.add(Violation.DOUBLY_BLACK1);
             swapColor(parent, silblingNode);
             silblingNode.left.color = Color.Black;
             rotateRight(parent);
         }
-        else if(!isLeft && parent.left.color == Color.Black &&
-                parent.left.right != null &&
-                parent.left.right.color == Color.Red){ // doubly black 2 (right)
+        else if(isDoublyBlackRightCase2(isLeft, silblingNode)){ // doubly black 2 (right)
             violations.add(Violation.DOUBLY_BLACK2);
             swapColor(silblingNode, silblingNode.right);
             silblingNode = rotateLeft(silblingNode);
@@ -270,9 +258,7 @@ public class RedBlackTree {
             silblingNode.left.color = Color.Black;
             rotateRight(parent);
         }
-        else if(!isLeft && parent.left.color == Color.Black &&
-                (parent.left.right == null ||
-                        parent.left.right.color == Color.Black)){ // doubly black 3 (right)
+        else if(isDoublyBlackRightCase3(isLeft, silblingNode)){ // doubly black 3 (right)
             violations.add(Violation.DOUBLY_BLACK3);
             silblingNode.color = Color.Red;
 
@@ -284,13 +270,57 @@ public class RedBlackTree {
                 checkRemoveViolation(Color.Black, parent, parent.parent,
                         parent.parent.data > parent.data);
         }
-        else if(!isLeft && parent.left.color == Color.Red){ // doubly black 4 (right)
+        else if(isDoublyBlackRightCase4(isLeft, silblingNode)){ // doubly black 4 (right)
             violations.add(Violation.DOUBLY_BLACK4);
             swapColor(parent, silblingNode);
             rotateRight(parent);
             checkRemoveViolation(Color.Black, replacedNode, parent, isLeft);
         }
         else throw new IllegalStateException("Invalid remove case");
+    }
+
+    private static boolean isDoublyBlackLeftCase1(boolean isLeft, Node silblingNode) {
+        return isLeft && silblingNode.color == Color.Black &&
+                silblingNode.right != null &&
+                silblingNode.right.color == Color.Red;
+    }
+
+    private static boolean isDoublyBlackLeftCase2(boolean isLeft, Node silblingNode) {
+        return isLeft && silblingNode.color == Color.Black &&
+                silblingNode.left != null &&
+                silblingNode.left.color == Color.Red;
+    }
+
+    private static boolean isDoublyBlackLeftCase3(boolean isLeft, Node silblingNode) {
+        return isLeft && silblingNode.color == Color.Black &&
+                (silblingNode.left == null ||
+                        silblingNode.left.color == Color.Black);
+    }
+
+    private static boolean isDoublyBlackLeftCase4(boolean isLeft, Node silblingNode) {
+        return isLeft && silblingNode.color == Color.Red;
+    }
+
+    private static boolean isDoublyBlackRightCase1(boolean isLeft, Node silblingNode) {
+        return !isLeft && silblingNode.color == Color.Black &&
+                silblingNode.left != null &&
+                silblingNode.left.color == Color.Red;
+    }
+
+    private static boolean isDoublyBlackRightCase2(boolean isLeft, Node silblingNode) {
+        return !isLeft && silblingNode.color == Color.Black &&
+                silblingNode.right != null &&
+                silblingNode.right.color == Color.Red;
+    }
+
+    private static boolean isDoublyBlackRightCase3(boolean isLeft, Node silblingNode) {
+        return !isLeft && silblingNode.color == Color.Black &&
+                (silblingNode.right == null ||
+                        silblingNode.right.color == Color.Black);
+    }
+
+    private static boolean isDoublyBlackRightCase4(boolean isLeft, Node silblingNode) {
+        return !isLeft && silblingNode.color == Color.Red;
     }
 
     private Node rotateRight(Node node) {
