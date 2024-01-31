@@ -32,7 +32,7 @@ class AvlTreeTest {
         // then
         AvlTree.Node root = avlTree.root;
 
-        nodeTest(root, null, 1, 2, 3);
+        nodeTest(root, null, 1, 2, 3, 1);
         leafNodeTest(root.left, root, 1);
         leafNodeTest(root.right, root, 3);
     }
@@ -58,7 +58,7 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 1, 2, 3);
+        nodeTest(root, null, 1, 2, 3, 1);
         leafNodeTest(root.left, root, 1);
         leafNodeTest(root.right, root, 3);
     }
@@ -89,9 +89,9 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 1, 2, 4);
-        nodeTest(root.left, root, 0, 1, EMPTY);
-        nodeTest(root.right, root, 3, 4, 5);
+        nodeTest(root, null, 1, 2, 4, 2);
+        nodeTest(root.left, root, 0, 1, EMPTY, 1);
+        nodeTest(root.right, root, 3, 4, 5, 1);
         leafNodeTest(root.left.left, root.left, 0);
         leafNodeTest(root.right.left, root.right, 3);
         leafNodeTest(root.right.right, root.right, 5);
@@ -123,13 +123,13 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 2, 4, 5);
+        nodeTest(root, null, 2, 4, 5, 2);
 
-        nodeTest(root.left, root, 1, 2, 3);
+        nodeTest(root.left, root, 1, 2, 3, 1);
         leafNodeTest(root.left.left, root.left, 1);
         leafNodeTest(root.left.right, root.left, 3);
 
-        nodeTest(root.right, root, EMPTY, 5, 6);
+        nodeTest(root.right, root, EMPTY, 5, 6, 1);
         leafNodeTest(root.right.right, root.right, 6);
     }
 
@@ -159,12 +159,12 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 2, 3, 5);
+        nodeTest(root, null, 2, 3, 5, 2);
 
-        nodeTest(root.left, root, 1, 2, EMPTY);
+        nodeTest(root.left, root, 1, 2, EMPTY, 1);
         leafNodeTest(root.left.left, root.left, 1);
 
-        nodeTest(root.right, root, 4, 5, 6);
+        nodeTest(root.right, root, 4, 5, 6, 1);
         leafNodeTest(root.right.left, root.right, 4);
         leafNodeTest(root.right.right, root.right, 6);
     }
@@ -196,12 +196,12 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 2, 3, 5);
+        nodeTest(root, null, 2, 3, 5, 2);
 
-        nodeTest(root.left, root, 1, 2, EMPTY);
+        nodeTest(root.left, root, 1, 2, EMPTY, 1);
         leafNodeTest(root.left.left, root.left, 1);
 
-        nodeTest(root.right, root, 4, 5, 6);
+        nodeTest(root.right, root, 4, 5, 6, 1);
         leafNodeTest(root.right.left, root.right, 4);
         leafNodeTest(root.right.right, root.right, 6);
     }
@@ -234,13 +234,13 @@ class AvlTreeTest {
 
         // then
         AvlTree.Node root = avlTree.root;
-        nodeTest(root, null, 3, 5, 6);
+        nodeTest(root, null, 3, 5, 6, 2);
 
-        nodeTest(root.left, root, 2, 3, 4);
+        nodeTest(root.left, root, 2, 3, 4, 1);
         leafNodeTest(root.left.left, root.left, 2);
         leafNodeTest(root.left.right, root.left, 4);
 
-        nodeTest(root.right, root, EMPTY, 6, 7);
+        nodeTest(root.right, root, EMPTY, 6, 7, 1);
         leafNodeTest(root.right.right, root.right, 7);
     }
 
@@ -248,10 +248,12 @@ class AvlTreeTest {
                           AvlTree.Node parent,
                           int leftData,
                           int data,
-                          int rightData){
+                          int rightData,
+                          int height){
         assertThat(target).isNotNull();
         assertThat(target.data).isEqualTo(data);
         assertThat(target.parent).isEqualTo(parent);
+        assertThat(target.height).isEqualTo(height);
 
         if(leftData == EMPTY)
             assertThat(target.left).isNull();
@@ -271,11 +273,6 @@ class AvlTreeTest {
     private void leafNodeTest(AvlTree.Node target,
                               AvlTree.Node parent,
                               int data){
-        assertThat(target).isNotNull();
-        assertThat(target.data).isEqualTo(data);
-        assertThat(target.parent).isEqualTo(parent);
-
-        assertThat(target.left).isNull();
-        assertThat(target.right).isNull();
+        nodeTest(target, parent, EMPTY, data, EMPTY, 0);
     }
 }

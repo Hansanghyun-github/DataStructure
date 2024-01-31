@@ -6,11 +6,13 @@ import static java.lang.Math.exp;
 import static java.lang.Math.max;
 
 public class AvlTree {
+    public int size;
     public Node root;
 
     public void add(int d) {
         Node newNode;
         if(root == null){
+            size++;
             root = new Node(null, d, null);
             return;
         }
@@ -37,7 +39,9 @@ public class AvlTree {
         else
             parent.right = newNode;
 
-        fixAfterChangingTree(newNode.parent);
+        fixAfterChangingTree(parent);
+
+        size++;
     }
 
     public boolean remove(int data) {
@@ -77,7 +81,7 @@ public class AvlTree {
         else if(target.left == null && target.right != null) {
             if(target == root){
                 root = target.right;
-                target.right.parent = root;
+                target.right.parent = null;
                 return;
             }
 
@@ -90,11 +94,12 @@ public class AvlTree {
                 parent.right = target.right;
                 target.right.parent = parent;
             }
+            fixAfterChangingTree(parent);
         }
         else if(target.left != null && target.right == null) {
             if(target == root) {
                 root = target.left;
-                target.left.parent = root;
+                target.left.parent = null;
                 return;
             }
 
@@ -107,16 +112,21 @@ public class AvlTree {
                 parent.right = target.left;
                 target.left.parent = parent;
             }
+            fixAfterChangingTree(parent);
         }
         else
             replaceSuccessorAndUnlink(target);
+
+        size--;
     }
 
     private void replaceSuccessorAndUnlink(Node target) {
         Node successor = target.right;
         if(successor.left == null) {
             target.right = successor.right;
-            successor.right.parent = target;
+
+            if(successor.right != null)
+                successor.right.parent = target;
             target.data = successor.data;
 
             fixAfterChangingTree(target);
@@ -127,40 +137,40 @@ public class AvlTree {
             successor = successor.left;
 
         Node parent = successor.parent;
-        if(successor.right != null) {
-            parent.left = successor.right;
+        parent.left = successor.right;
+        if(successor.right != null)
             successor.right.parent = parent;
-        }
         target.data = successor.data;
 
         fixAfterChangingTree(parent);
     }
 
-    private void fixAfterChangingTree(Node parent) {
+    private void fixAfterChangingTree(Node node) {
         // check all parent nodes maintain balance factor
-        Node temp = parent;
-        while (temp != null) {
-            temp.updateHeight();
-            int tempBf = temp.getBf();
-            // guarantee sub node's bf is in {-1,0,1}
-            if(tempBf == 2) {
-                // check LL or LR
-                int state = checkLLorLR(temp);
+        node.updateHeight();
+        int tempBf = node.getBf();
 
-                if(state == LR)
-                    rotateLeft(temp.left);
-                temp = rotateRight(temp);
-            }
-            else if(tempBf == -2) {
-                // check RR or RL
-                int state = checkRRorRL(temp);
+        //assert tempBf > 2 || tempBf < -2;
 
-                if(state == RL)
-                    rotateRight(temp.right);
-                temp = rotateLeft(temp);
-            }
-            temp = temp.parent;
+        // guarantee sub node's bf is in {-1,0,1}
+        if(tempBf == 2) {
+            // check LL or LR
+            int state = checkLLorLR(node);
+
+            if(state == LR)
+                rotateLeft(node.left);
+            node = rotateRight(node);
         }
+        else if(tempBf == -2) {
+            // check RR or RL
+            int state = checkRRorRL(node);
+
+            if(state == RL)
+                rotateRight(node.right);
+            node = rotateLeft(node);
+        }
+
+        if(node.parent != null) fixAfterChangingTree(node.parent);
     }
 
     private Node rotateLeft(Node node) {
@@ -176,17 +186,15 @@ public class AvlTree {
 
         right.parent = parent;
         if(right.parent != null){
-            if(parent.data > right.data)
+            if(parent.data > node.data)
                 parent.left = right;
             else parent.right = right;
         }
+        else root = right;
 
         // update BF
         node.updateHeight();
         right.updateHeight();
-
-
-        if(root == node) root = right;
 
         return right;
     }
@@ -204,7 +212,7 @@ public class AvlTree {
 
         left.parent = parent;
         if(left.parent != null){
-            if(parent.data > left.data)
+            if(parent.data > node.data)
                 parent.left = left;
             else parent.right = left;
         }
@@ -223,11 +231,13 @@ public class AvlTree {
         Node left = node.left;
         int leftBf = left.getBf();
 
+        //assert leftBf == -1 || leftBf == 1;
+
         // guarantee left node's bf is -1 or 1
-        if(leftBf == 1)
-            return LL;
-        else
+        if(leftBf == -1)
             return LR;
+        else
+            return LL;
     }
 
     // parameter node's bf is -2
@@ -235,11 +245,13 @@ public class AvlTree {
         Node right = node.right;
         int rightBf = right.getBf();
 
+        //assert rightBf == -1 || rightBf == 1;
+
         // guarantee right node's bf is -1 or 1
-        if(rightBf == -1)
-            return RR;
-        else
+        if(rightBf == 1)
             return RL;
+        else
+            return RR;
     }
 
 
