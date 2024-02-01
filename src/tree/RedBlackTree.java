@@ -400,8 +400,24 @@ public class RedBlackTree {
     private void initViolation() {
         violations.clear();
     }
-    public class Node {
 
+    public int checkBlackHeight(Node node) {
+        if(node == null) return 1;
+
+        int leftBH = checkBlackHeight(node.left);
+        int rightBH = checkBlackHeight(node.right);
+
+        if(leftBH == -1) return -1; // left subTree has violation
+        if(rightBH == -1) return -1; // right subTree has violation
+        if(leftBH != rightBH) return -1;
+
+        if(node.color == Color.Black)
+            return 1 + leftBH;
+        else
+            return leftBH;
+    }
+
+    public class Node {
         public int data;
         public Node parent;
         public Node left;
@@ -418,7 +434,6 @@ public class RedBlackTree {
         public Node(Node left, int data, Node right) {
             this(null, left, data, right);
         }
-
     }
 
 

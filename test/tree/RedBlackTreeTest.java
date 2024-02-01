@@ -36,6 +36,8 @@ class RedBlackTreeTest {
         rootNodeTest(root, 1, 2, 3, Black);
         leafNodeTest(root.left, root, 1, Red);
         leafNodeTest(root.right, root, 3, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -51,6 +53,8 @@ class RedBlackTreeTest {
         assertThat(tree.size).isOne();
 
         rootNodeTest(tree.root, EMPTY, 1, EMPTY, Black);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -73,6 +77,8 @@ class RedBlackTreeTest {
         rootNodeTest(root, 0, 1, 2, Black);
         leafNodeTest(root.left, root, 0, Red);
         leafNodeTest(root.right, root, 2, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -95,6 +101,8 @@ class RedBlackTreeTest {
         rootNodeTest(root, 1, 2, 3, Black);
         leafNodeTest(root.left, root, 1, Red);
         leafNodeTest(root.right, root, 3, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -119,6 +127,8 @@ class RedBlackTreeTest {
         nodeTest(root.left, root, 0, 1, EMPTY, Black);
         leafNodeTest(root.left.left, root.left, 0, Red);
         leafNodeTest(root.right, root, 3, Black);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -142,6 +152,8 @@ class RedBlackTreeTest {
 
         rootNodeTest(root, 1, 2, EMPTY, Black);
         leafNodeTest(root.left, root, 1, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -165,6 +177,8 @@ class RedBlackTreeTest {
         rootNodeTest(root, 0, 2, 3, Black);
         leafNodeTest(root.left, root, 0, Black);
         leafNodeTest(root.right, root, 3, Black);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -198,6 +212,8 @@ class RedBlackTreeTest {
         nodeTest(root.right, root, 12, 15, 17, Black);
         leafNodeTest(root.right.left, root.right, 12, Red);
         leafNodeTest(root.right.right, root.right, 17, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -231,6 +247,8 @@ class RedBlackTreeTest {
         nodeTest(root.right, root, 12, 15, 17, Black);
         leafNodeTest(root.right.left, root.right, 12, Red);
         leafNodeTest(root.right.right, root.right, 17, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -262,6 +280,8 @@ class RedBlackTreeTest {
 
         nodeTest(root.right, root, EMPTY, 15, 17, Black);
         leafNodeTest(root.right.right, root.right, 17, Red);
+
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     @Test
@@ -290,17 +310,8 @@ class RedBlackTreeTest {
 
         nodeTest(root.right, root, EMPTY, 17, 19, Black);
         leafNodeTest(root.right.right, root.right, 19, Red);
-    }
 
-    // TODO doubly black right case
-
-    private void rootNodeTest(RedBlackTree.Node target,
-                              int leftData,
-                              int data,
-                              int rightData,
-                              RedBlackTree.Color color){
-        assertThat(target).isEqualTo(tree.root);
-        nodeTest(target, null, leftData, data, rightData, color);
+        assertThat(tree.checkBlackHeight(tree.root)).isNotEqualTo(-1);
     }
 
     private void nodeTest(RedBlackTree.Node target,
@@ -327,6 +338,15 @@ class RedBlackTreeTest {
             assertThat(target.right).isNotNull();
             assertThat(target.right.data).isEqualTo(rightData);
         }
+    }
+
+    private void rootNodeTest(RedBlackTree.Node target,
+                              int leftData,
+                              int data,
+                              int rightData,
+                              RedBlackTree.Color color){
+        assertThat(target).isEqualTo(tree.root);
+        nodeTest(target, null, leftData, data, rightData, color);
     }
 
     private void leafNodeTest(RedBlackTree.Node target,
