@@ -404,6 +404,13 @@ public class RedBlackTree {
     public int checkBlackHeight(Node node) {
         if(node == null) return 1;
 
+        // color check
+        if(node == root && node.color == Color.Red) return -1;
+
+        if(node.color == Color.Red &&
+                (colorOf(node.left) == Color.Red || colorOf(node.right) == Color.Red))
+            return -1;
+
         int leftBH = checkBlackHeight(node.left);
         int rightBH = checkBlackHeight(node.right);
 
