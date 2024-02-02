@@ -155,17 +155,17 @@ public class AvlTree {
         // guarantee sub node's bf is in {-1,0,1}
         if(tempBf == 2) {
             // check LL or LR
-            int state = checkLLorLR(node);
+            Bias state = checkLLorLR(node);
 
-            if(state == LR)
+            if(state == Bias.LR)
                 rotateLeft(node.left);
             node = rotateRight(node);
         }
         else if(tempBf == -2) {
             // check RR or RL
-            int state = checkRRorRL(node);
+            Bias state = checkRRorRL(node);
 
-            if(state == RL)
+            if(state == Bias.RL)
                 rotateRight(node.right);
             node = rotateLeft(node);
         }
@@ -227,7 +227,7 @@ public class AvlTree {
     }
 
     // parameter node's bf is 2
-    private int checkLLorLR(Node node) {
+    private Bias checkLLorLR(Node node) {
         Node left = node.left;
         int leftBf = left.getBf();
 
@@ -235,13 +235,13 @@ public class AvlTree {
 
         // guarantee left node's bf is -1 or 1
         if(leftBf == -1)
-            return LR;
+            return Bias.LR;
         else
-            return LL;
+            return Bias.LL;
     }
 
     // parameter node's bf is -2
-    private int checkRRorRL(Node node) {
+    private Bias checkRRorRL(Node node) {
         Node right = node.right;
         int rightBf = right.getBf();
 
@@ -249,9 +249,9 @@ public class AvlTree {
 
         // guarantee right node's bf is -1 or 1
         if(rightBf == 1)
-            return RL;
+            return Bias.RL;
         else
-            return RR;
+            return Bias.RR;
     }
 
 
@@ -289,8 +289,7 @@ public class AvlTree {
         }
     }
 
-    private static final int LL = 0;
-    private static final int RR = 1;
-    private static final int LR = 2;
-    private static final int RL = 3;
+    private enum Bias{
+        LL, LR, RR, RL;
+    }
 }
