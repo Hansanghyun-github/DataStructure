@@ -1,6 +1,7 @@
 package tree;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class RedBlackTree {
@@ -184,7 +185,8 @@ public class RedBlackTree {
 
             if(rightOf(successor) != null)
                 successor.right.parent = node;
-            checkRemoveViolation(colorOf(node), rightOf(successor), node, false);
+            node.data = successor.data;
+            checkRemoveViolation(colorOf(successor), rightOf(successor), node, false);
             return;
         }
 
@@ -196,7 +198,7 @@ public class RedBlackTree {
             successor.right.parent = parent;
         node.data = successor.data;
 
-        checkRemoveViolation(colorOf(rightOf(successor)), rightOf(successor), parent, true);
+        checkRemoveViolation(successor.color, parent.left, parent, true);
     }
 
     private void checkRemoveViolation(Color removedColor, Node replacedNode, Node parent, boolean isLeft) {
@@ -402,7 +404,7 @@ public class RedBlackTree {
     }
 
     public int checkBlackHeight(Node node) {
-        if(node == null) return 1;
+        if(node == null) return 1; // nill node = Black
 
         // color check
         if(node == root && node.color == Color.Red) return -1;
